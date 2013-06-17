@@ -21,6 +21,8 @@ Environment Setup
 git clone git@github.com:mixxxdj/backstage.git
 cd backstage
 virtualenv --distribute ./virtualenv
+source virtualenv/bin/activate
+# You should see the (virtualenv) tag in your prompt now.
 pip install django
 pip install psycopg2
 ```
