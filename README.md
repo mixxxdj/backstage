@@ -27,3 +27,13 @@ pip install django
 pip install psycopg2
 ```
 
+Running a development server
+============================
+
+This works as it usually does with Django:
+
+```shell
+python manage.py runserver host:port
+```
+
+Then navigate to http://host:port/.
