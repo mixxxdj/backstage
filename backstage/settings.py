@@ -54,7 +54,7 @@ STATIC_ROOT =join(SETTINGS_ROOT, 'static/')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/backstage/static/'
+STATIC_URL = '/backstage/static/' 
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
