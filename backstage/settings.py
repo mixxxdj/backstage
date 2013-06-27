@@ -8,7 +8,7 @@ from os.path import join
 SETTINGS_ROOT = os.path.dirname(__file__)
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('weixin', 'weixindlut@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -166,10 +166,6 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
     },
     'loggers': {
         'django': {
@@ -190,8 +186,9 @@ LOGGING = {
     }
 }
 
+ALLOWED_HOSTS = ["192.168.11.10"]
 """
-FILE Upload
+FILE Upload``
 """
 FILE_UPLOAD_TEMP_DIR  = os.path.join(os.path.dirname(__file__),"tmp").replace("\\",'/')
 FILE_UPLOAD_HANDLERS = (
