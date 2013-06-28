@@ -4,14 +4,14 @@
 *.swo
 *.orig
 build/*
-log/*
-tmp/*
-media/pictures/*
-media/tmp/*
+backstage/log/*
+backstage/tmp/*
+backstage/media/pictures/*
+backstage/media/tmp/*
 celerytest/
 *.rdb
 
-static/*
+backstage/static/*
 
 
 .settings/*
