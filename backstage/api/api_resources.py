@@ -27,7 +27,8 @@ class MIDICompanyResouce(ModelResource):
         allowed_methods = ["get"]
         authentication = Authentication()
         authorization = Authorization()
-        filtering = {'company_name': ALL}
+        filtering = {'company_name': ALL,
+                     'id':ALL}
 
     def prepend_urls(self):
         return [url(r"^(?P<resource_name>%s)/(?P<company_name>[\w\d_.-]+)/$" \
