@@ -186,7 +186,7 @@ LOGGING = {
     }
 }
 
-ALLOWED_HOSTS = ["192.168.11.10"]
+ALLOWED_HOSTS = ["192.168.0.161","202.118.75.135"]
 """
 FILE Upload``
 """
