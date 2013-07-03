@@ -84,13 +84,10 @@ class PresetComments(models.Model):
 class FileStorage(models.Model):
     """
     """
-    fid =  models.CharField(unique=True, blank=False, max_length=50,
-                            verbose_name="id", primary_key=True,
-                            default=get_uuid)
+    file_name = models.CharField(max_length=50, blank=False)
     mapping_preset_id = models.ForeignKey(MappingPresetObject, blank=False)
     file_type = models.ForeignKey(FileTypeDict, blank=False)
     file_size = models.CharField(max_length=50, blank=True, default=None)
-    file_showname = models.CharField(max_length=50, blank=False)
     file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH + "/%Y/%m/%d")
 
     class Meta:
@@ -98,4 +95,4 @@ class FileStorage(models.Model):
         verbose_name_plural = "File Storage"
 
     def __unicode__(self):
-        return self.fid
+        return self.file_name
