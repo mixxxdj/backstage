@@ -86,7 +86,7 @@ class MappingPresetObjectResource(ModelResource):
     preset_status = fields.ForeignKey(CertificatedOperationDictResource,
             'preset_status')
     version = fields.ForeignKey(MixxxVersionDictResource, 'mixxx_version')
-    controller = fields.ForeignKey(MIDIControllerResource, 'midi_controller')
+    controller_name = fields.ForeignKey(MIDIControllerResource, 'midi_controller')
 
     class Meta:
         queryset = MappingPresetObject.objects.all()
@@ -102,12 +102,14 @@ class MappingPresetObjectResource(ModelResource):
 
     def dehydrate(self, bundle):
         pid = bundle.data["pid"]
-        mid = MappingPresetObject.objects.get(pid=pid).midi_controller.mid
+        controller_name = MappingPresetObject.objects.get(pid=pid).midi_controller.controller_name
+        company_name = MappingPresetObject.objects.get(pid=pid).midi_controller.company.company_name
         author = MappingPresetObject.objects.get(pid=pid).author.username
         preset_source = MappingPresetObject.objects.get(pid=pid).preset_source.source
         preset_status = MappingPresetObject.objects.get(pid=pid).preset_status.category
         version = MappingPresetObject.objects.get(pid=pid).mixxx_version.version
-        bundle.data["controller"] = mid
+        bundle.data["controller_name"] = controller_name
+        bundle.data["company_name"] = company_name
         bundle.data["author"] = author
         bundle.data["preset_source"] = preset_source
         bundle.data["preset_status"] = preset_status
