@@ -12,7 +12,6 @@ from backstage.api.api_resources import *
 from tastypie.api import Api
 
 v1_api = Api(api_name="v1")
-v1_api.register(MIDICompanyResouce())
 v1_api.register(MIDIControllerResource())
 v1_api.register(MappingPresetObjectResource())
 v1_api.register(PresetCommentsResource())

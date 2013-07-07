@@ -12,7 +12,6 @@ from backstage.const.models import *
 
 
 RegisterClass = (FileTypeDict,
-                 MIDICompanyDict,
                  MixxxVersionDict,
                  CertificatedOperationDict,
                  MappingPresetSourceDict,

@@ -23,7 +23,6 @@ class MIDIController(models.Model):
     mid =  models.CharField(unique=True, blank=False, max_length=50,
                             verbose_name="id", primary_key=True,
                             default=get_uuid)
-    company = models.ForeignKey(MIDICompanyDict, blank=False)
     description = models.CharField(max_length=500, blank=True)
     controller_name = models.CharField(max_length=100, blank=False, unique=True)
     
@@ -49,9 +48,7 @@ class MappingPresetObject(models.Model):
     mixxx_version = models.ForeignKey(MixxxVersionDict, blank=False)
     preset_name = models.CharField(max_length=100, unique=True, blank=False)
     midi_controller = models.ForeignKey(MIDIController, blank=False)
-    add_date = models.DateTimeField(blank=False,
-                                    default = lambda:datetime.datetime.now())
-
+    schema_version = models.IntegerField(blank=False)
     class Meta:
         verbose_name = "midi controller preset"
         verbose_name_plural = "midi controller preset"

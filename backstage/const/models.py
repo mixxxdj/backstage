@@ -30,21 +30,6 @@ class FileTypeDict(models.Model):
     def __unicode__(self):
         return self.get_category_display()
 
-
-class MIDICompanyDict(models.Model):
-    """
-    """
-    company_name = models.CharField(max_length=200, blank=False, unique=True,
-                                    verbose_name=u"MIDI Company name")
-
-    class Meta:
-        verbose_name = "MIDI Company name"
-        verbose_name_plural = "MIDI Company Name"
-
-    def __unicode__(self):
-        return self.company_name
-
-
 class MixxxVersionDict(models.Model):
     """
     """

@@ -19,8 +19,8 @@ class UserInfo(models.Model):
     email = models.EmailField(max_length=50, blank=True)
     username = models.CharField(blank=False, max_length=100)
     homepage_url = models.URLField(max_length=200, blank=True)
-    location = models.CharField(blank=False, max_length=50)
-    irc_nickname = models.CharField(blank=False, max_length=50)
+    location = models.CharField(blank=True, max_length=50)
+    irc_nickname = models.CharField(blank=True, max_length=50)
 
     class Meta:
         verbose_name = "user info"

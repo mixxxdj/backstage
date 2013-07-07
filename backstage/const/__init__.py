@@ -11,18 +11,21 @@ __all__ = ["", ]
 
 FILE_PIC = "pic"
 FILE_XML = "xml"
+FILE_JS = "js"
 
 FILE_CHOICES = (
     (FILE_PIC, u"picture"),
     (FILE_XML, u"xml"),
+    (FILE_JS, u"js"),
 )
 
 SOURCE_MIXXX = "mixxx"
 SOURCE_FORUM = "forum"
-
+SOURCE_WIKI = "wiki"
 PRESET_SOURCE_CHOICES = (
     (SOURCE_MIXXX, u"mixxx offical"),
-    (SOURCE_FORUM, u"forum"),
+    (SOURCE_FORUM, u"mixxx forum"),
+    (SOURCE_WIKI, u"mixxx wiki"),
 )
 
 CERTIFICATE_PASS = "pass"
