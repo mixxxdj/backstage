@@ -94,25 +94,39 @@ class MappingPresetObjectResource(ModelResource):
         bundle.data["preset_source"] = preset_source
         bundle.data["preset_status"] = preset_status
         bundle.data["version"] = version
+        bundle.data["picture_file"]=FileStorage.objects.get(mapping_preset_id=pid,file_type=FileTypeDict.objects.get(category=FILE_PIC)).file_obj
+        #bundle.data["js_file"]=FileStorage.objects.get(mapping_preset_id=pid,file_type=FileTypeDict.objects.get(category=FILE_JS)).file_obj
+        bundle.data["xml_file"]=FileStorage.objects.get(mapping_preset_id=pid,file_type=FileTypeDict.objects.get(category=FILE_XML)).file_obj
         return bundle
+
 
 class PresetCommentsResource(ModelResource):
 
     preset_mapping_uuid = fields.ForeignKey(MappingPresetObjectResource,
-            'preset_mapping_uuid')
-    
+                                            'preset_mapping_uuid')
+
     class Meta:
         queryset = PresetComments.objects.all()
         resource_name = "midi/preset/comment"
         allowed_methods = ["get"]
-    
+
+
 class FileStorageResource(ModelResource):
 
     mapping_preset_id = fields.ForeignKey(MappingPresetObjectResource,
-            "mapping_preset_id")
+                                          "mapping_preset_id")
     file_type = fields.ForeignKey(FileTypeDictResource, "file_type")
 
     class Meta:
         queryset = FileStorage.objects.all()
-        resource_name = "midi/preset/file"
+        resource_name = "presetfile"
         allowed_methods = ["get"]
+        filtering = {'mapping_preset_id': ALL_WITH_RELATIONS,
+                     'file_type': ALL_WITH_RELATIONS,
+                     'file_name': ALL}
+
+    def dehydrate(self, bundle):
+        fid = bundle.data["id"]
+        bundle.data["file_type"] = FileStorage.objects.get(id=fid).file_type.category
+        bundle.data["mapping_preset_id"] = FileStorage.objects.get(id=fid).mapping_preset_id.pid
+        return bundle
