@@ -94,9 +94,9 @@ class MappingPresetObjectResource(ModelResource):
         bundle.data["preset_source"] = preset_source
         bundle.data["preset_status"] = preset_status
         bundle.data["version"] = version
-        bundle.data["picture_file"]=FileStorage.objects.get(mapping_preset_id=pid,file_type=FileTypeDict.objects.get(category=FILE_PIC)).file_obj
+        bundle.data["picture_file"]=FileStorage.objects.get(mapping_preset_id=pid,file_type=FileTypeDict.objects.get(category=FILE_PIC)).file_obj.url
         #bundle.data["js_file"]=FileStorage.objects.get(mapping_preset_id=pid,file_type=FileTypeDict.objects.get(category=FILE_JS)).file_obj
-        bundle.data["xml_file"]=FileStorage.objects.get(mapping_preset_id=pid,file_type=FileTypeDict.objects.get(category=FILE_XML)).file_obj
+        bundle.data["xml_file"]=FileStorage.objects.get(mapping_preset_id=pid,file_type=FileTypeDict.objects.get(category=FILE_XML)).file_obj.url
         return bundle
 
 

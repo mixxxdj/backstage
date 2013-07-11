@@ -75,7 +75,7 @@ class PresetComments(models.Model):
         verbose_name_plural = "preset comments"
 
     def __unicode__(self):
-        return self.mid
+        return self.preset_mapping_uuid.preset_name
 
 
 class FileStorage(models.Model):
