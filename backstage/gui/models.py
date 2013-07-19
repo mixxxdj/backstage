@@ -40,7 +40,7 @@ class MappingPresetObject(models.Model):
     pid =  models.CharField(unique=True, blank=False, max_length=50,
                             verbose_name="id", primary_key=True,
                             default=get_uuid)
-    author = models.ForeignKey(UserInfo, blank=False)
+    author = models.ManyToManyField(UserInfo, blank=False)
     url = models.URLField(blank=False)
     description = models.TextField(max_length=500,blank=True)
     preset_source = models.ForeignKey(MappingPresetSourceDict, blank=False)

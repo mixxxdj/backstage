@@ -66,7 +66,7 @@ class MappingPresetSourceDictResource(ModelResource):
 
 class MappingPresetObjectResource(ModelResource):
 
-    author = fields.ForeignKey(UserInfoResource, 'author')
+    author = fields.ToManyField(UserInfoResource, 'author')
     preset_source = fields.ForeignKey(MappingPresetSourceDictResource,
             'preset_source')
     preset_status = fields.ForeignKey(CertificatedOperationDictResource,
@@ -78,19 +78,17 @@ class MappingPresetObjectResource(ModelResource):
         queryset = MappingPresetObject.objects.all()
         resource_name = "midi/preset"
         allowed_methods = ["get"]
-        filtering = {'pid':ALL,
-                'preset_name':ALL,
-                'midi_controller':ALL_WITH_RELATIONS}
+        filtering = {'pid' : ALL,
+                'preset_name' : ALL,
+                'midi_controller' : ALL_WITH_RELATIONS}
 
     def dehydrate(self, bundle):
         pid = bundle.data["pid"]
         controller_name = MappingPresetObject.objects.get(pid=pid).midi_controller.controller_name
-        author = MappingPresetObject.objects.get(pid=pid).author.username
         preset_source = MappingPresetObject.objects.get(pid=pid).preset_source.source
         preset_status = MappingPresetObject.objects.get(pid=pid).preset_status.category
         version = MappingPresetObject.objects.get(pid=pid).mixxx_version.version
         bundle.data["controller_name"] = controller_name
-        bundle.data["author"] = author
         bundle.data["preset_source"] = preset_source
         bundle.data["preset_status"] = preset_status
         bundle.data["version"] = version
@@ -99,6 +97,12 @@ class MappingPresetObjectResource(ModelResource):
         bundle.data["xml_file"] = FileStorage.objects.get(mapping_preset_id=pid,file_type=FileTypeDict.objects.get(category=FILE_XML)).file_obj.url
         comments = PresetComments.objects.filter(preset_mapping_uuid=pid)
         bundle.data["avg_ratings"] = comments.all().aggregate(Avg('ratings'))['ratings__avg']
+        authorList = bundle.data["author"]
+        authors = []
+        for aut in authorList:
+            authorID = aut.split('/')[-2]
+            authors.append(UserInfo.objects.get(userid=authorID).username)
+        bundle.data["author"] = authors
         return bundle
 
 
