@@ -9,7 +9,7 @@ Desc: dict table
 
 from django.db import models
 
-from backstage.const import FILE_XML, FILE_PIC, FILE_CHOICES
+from backstage.const import FILE_XML, FILE_PIC, FILE_JS, FILE_CHOICES
 from backstage.const import SOURCE_FORUM, SOURCE_MIXXX, PRESET_SOURCE_CHOICES
 from backstage.const import CERTIFICATE_FAILED, CERTIFICATE_PASS
 from backstage.const import CERTIFICATE_UNDEFINED
