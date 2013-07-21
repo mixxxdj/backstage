@@ -200,4 +200,3 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 PROCESS_FILE_PATH = join("tmp", "process_file")
 TMP_FILE_PATH = join(SETTINGS_ROOT, 'tmp/')
-

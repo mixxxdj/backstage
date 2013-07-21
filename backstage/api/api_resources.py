@@ -9,10 +9,15 @@ Desc:
 
 from django.conf.urls.defaults import *
 from django.db.models import Avg
+from django.core.paginator import Paginator, InvalidPage
+from django.http import Http404
+from django.db.models import Q
+
 from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
 from tastypie.authentication import Authentication
 from tastypie.resources import ALL, ALL_WITH_RELATIONS
+from tastypie.utils import trailing_slash
 from tastypie import fields
 
 from backstage.const.models import *
@@ -147,6 +152,35 @@ class MappingPresetObjectResource(ModelResource):
             bundle.data["avg_ratings"] = self.getAvgRatings(bundle)
             bundle.data["author"] = self.getAuthor(bundle)
         return bundle
+
+    def prepend_urls(self):
+        return [url(r"^(?P<resource_name>%s)/search%s$" %
+                    (self._meta.resource_name, trailing_slash()),
+                    self.wrap_view('get_search'),
+                    name="api_get_search"), ]
+
+    def get_search(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        self.throttle_check(request)
+        queryList = request.GET.getlist('q')
+        if len(queryList) > 0:
+            qList = Q(preset_name__icontains=queryList[0])
+            for i in range(1, len(queryList)):
+                qList = qList | Q(preset_name__icontains=queryList[i])
+            sqs = MappingPresetObject.objects.filter(qList)
+        else:
+            sqs = MappingPresetObject.objects.all()
+        objects = []
+        for result in sqs:
+            bundle = self.build_bundle(obj=result, request=request)
+            bundle = self.full_dehydrate(bundle)
+            objects.append(bundle)
+
+        object_list = {
+            'objects': objects,
+        }
+        self.log_throttled_access(request)
+        return self.create_response(request, object_list)
 
 
 class PresetCommentsResource(ModelResource):
