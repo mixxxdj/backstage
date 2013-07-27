@@ -17,7 +17,7 @@ class UserInfo(models.Model):
                               verbose_name="id", primary_key=True,
                               default=get_uuid)
     email = models.EmailField(max_length=50, blank=True)
-    username = models.CharField(blank=False, max_length=100)
+    username = models.CharField(blank=False, max_length=100, unique=True)
     homepage_url = models.URLField(max_length=200, blank=True)
     location = models.CharField(blank=True, max_length=50)
     irc_nickname = models.CharField(blank=True, max_length=50)

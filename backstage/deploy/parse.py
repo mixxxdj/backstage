@@ -21,6 +21,7 @@ PICFILES = "picfiles"
 FILE = "file"
 PIC = "pic"
 JS = "js"
+XML = "xml"
 
 BASIC_LIST = (AUTHOR, DESC, FORUM, WIKI, NAME)
 
@@ -58,20 +59,26 @@ def parse(path=None):
 
     controller_node = root.find(TREE_CONTROLLER)
     ret[CONTROLLER] = controller_node.attrib[CONTROLLER] if controller_node is not None else None
-
+    resDir = os.path.split(path)[0]
     script_node = controller_node.find(SCRIPTFILES)
     if script_node is None:
         ret[JS] = None
     else:
         script_file = script_node.find(FILE)  # currently only get one JS file
-        ret[JS] = script_file.get("filename") if script_file is not None else None
+        if script_file is not None:
+            ret[JS] = os.path.join(resDir, script_file.get("filename"))
+        else:
+            ret[JS] = None
 
     pic_node = controller_node.find(PICFILES)
     if pic_node is None:
         ret[PIC] = None
     else:
         pic_file = pic_node.find(PIC)
-        ret[PIC] = pic_file.get("name") if pic_file is not None else None
+        if pic_file is not None:
+            ret[PIC] = os.path.join(resDir, pic_file("name"))
+        else:
+            ret[PIC] = None
     print "\n"
     return ret
 
