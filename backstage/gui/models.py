@@ -42,7 +42,7 @@ class MappingPresetObject(models.Model):
                             default=get_uuid)
     author = models.ManyToManyField(UserInfo, blank=False)
     url = models.URLField(blank=False)
-    description = models.TextField(max_length=500,blank=True)
+    description = models.TextField(max_length=500, default="")
     preset_source = models.ForeignKey(MappingPresetSourceDict, blank=False)
     preset_status = models.ForeignKey(CertificatedOperationDict, blank=False)
     mixxx_version = models.ForeignKey(MixxxVersionDict, blank=False)
