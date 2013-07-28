@@ -54,7 +54,7 @@ class MappingPresetObject(models.Model):
         verbose_name_plural = "midi controller preset"
 
     def __unicode__(self):
-        return self.preset_name
+        return self.pid
 
 
 class PresetComments(models.Model):
