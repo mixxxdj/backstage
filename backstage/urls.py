@@ -18,7 +18,8 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
      url(r'^admin/', include(admin.site.urls)),
-     url(r'api/', include('backstage.api.urls'), name="api")
+     url(r'api/', include('backstage.api.urls'), name="api"),
+     url(r'^upload$', "backstage.gui.views.upload", name="upload"),
 )
 
 urlpatterns += staticfiles_urlpatterns()
