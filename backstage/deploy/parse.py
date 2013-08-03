@@ -76,7 +76,7 @@ def parse(path=None):
     else:
         pic_file = pic_node.find(PIC)
         if pic_file is not None:
-            ret[PIC] = os.path.join(resDir, pic_file("name"))
+            ret[PIC] = os.path.join(resDir, pic_file.get("name"))
         else:
             ret[PIC] = None
     print "\n"

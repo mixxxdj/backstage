@@ -50,9 +50,9 @@ def importAuthors(record, preset):
                 aut = UserInfo.objects.create(username=author)
                 aut.save()
                 preset.author.add(aut)
-                print "build author %s" % author
+                #print "build author %s" % author
             else:
-                print "Author %s already exists\n" % author
+                #print "Author %s already exists\n" % author
                 preset.author.add(uname)
             print "Authors are all inserted!"
     else:
@@ -72,7 +72,8 @@ def importFiles(record, preset):
     for key in ret.keys():
         value = ret.get(key)
         if value is not None:
-            if os.path.exists(value) is True:
+            #if os.path.exists(value) is True:
+            if os.path.isfile(value) is True:
                 fs.file_name = os.path.basename(value).split('.')[0]
                 fs.mapping_preset_id = preset
                 fs.file_type = FileTypeDict.objects.get(category=key)
@@ -80,8 +81,8 @@ def importFiles(record, preset):
                 f = open(value)
                 fs.file_obj.save(os.path.basename(value), File(f))
                 fs.save()
-                f.close()
-                print "insert a file:%s" % fs.file_name
+                #f.close()
+                print "insert a file:%s" % os.path.basename(value)
 
 
 def importControllers(record, preset):
@@ -113,7 +114,6 @@ def importMixxxVersion(record, preset):
 
 
 def importPresetData(path):
-
     records = midi_parse(path)
     for record in records:
         try:
@@ -159,5 +159,5 @@ def importPresetData(path):
 
 if __name__ == "__main__":
     initializedb()
-    path = "/home/amaris/dev-mixxx/backstage/backstage/xmlparse/controllers"
+    path = "/home/amaris/dev-mixxx/backstage/backstage/test/controllers"
     importPresetData(path)
