@@ -113,51 +113,61 @@ def importMixxxVersion(record, preset):
         print "version %s is inserted ok!" % version
 
 
-def importPresetData(path):
-    records = midi_parse(path)
+def importOnePreset(path):
+    record = parse(path)
+    return importPresetData(record)
+
+
+def importMultiPresets(directory):
+    records = midi_parse(directory)
     for record in records:
-        try:
-            MappingPresetObject.objects.get(preset_name=record[NAME])
-        except Exception:
-            preset = MappingPresetObject()
-            print "importPresetData-------\n"
-            print record
-            print "\n"
-            preset.preset_name = record[NAME]
-            if record[DESC] is not None:
-                preset.description = record[DESC]
-            else:
-                preset.description = ""
-
-            preset.schema_version = record[SCHEMAVERSION]
-            forums = record[FORUM]
-            wiki = record[WIKI]
-
-            if forums is not None:
-                preset.url = forums
-                preset.preset_source = MappingPresetSourceDict.objects.get(source='forum')
-            elif wiki is not None:
-                preset.url = wiki
-                preset.preset_source = MappingPresetSourceDict.objects.get(source='wiki')
-            else:
-                preset.url = "www.mixxx.org"
-                preset.preset_source = MappingPresetSourceDict.objects.get(source='mixxx')
-            preset.preset_status = CertificatedOperationDict.objects.get(category='pass')
-            importMixxxVersion(record, preset)
-            importControllers(record, preset)
-            preset.save()
-            # UserInfo and MappingPresetObject is a many-many
-            # relationship,before importAuthors should save preset
-            importAuthors(record, preset)
-            print "==========preset %s is inserted ok==========" % record[NAME]
-            importFiles(record, preset)
-
-        else:
-            print "preset %s is already exists\n" % record[NAME]
+        importPresetData(record)
     print "all import ok!"
+
+
+def importPresetData(record):
+    try:
+        MappingPresetObject.objects.get(preset_name=record[NAME])
+    except Exception:
+        preset = MappingPresetObject()
+        print "importPresetData-------\n"
+        print record
+        print "\n"
+        preset.preset_name = record[NAME]
+        if record[DESC] is not None:
+            preset.description = record[DESC]
+        else:
+            preset.description = ""
+
+        preset.schema_version = record[SCHEMAVERSION]
+        forums = record[FORUM]
+        wiki = record[WIKI]
+
+        if forums is not None:
+            preset.url = forums
+            preset.preset_source = MappingPresetSourceDict.objects.get(source='forum')
+        elif wiki is not None:
+            preset.url = wiki
+            preset.preset_source = MappingPresetSourceDict.objects.get(source='wiki')
+        else:
+            preset.url = "www.mixxx.org"
+            preset.preset_source = MappingPresetSourceDict.objects.get(source='mixxx')
+        preset.preset_status = CertificatedOperationDict.objects.get(category='pass')
+        importMixxxVersion(record, preset)
+        importControllers(record, preset)
+        preset.save()
+        # UserInfo and MappingPresetObject is a many-many
+        # relationship,before importAuthors should save preset
+        importAuthors(record, preset)
+        print "==========preset %s is inserted ok==========" % record[NAME]
+        importFiles(record, preset)
+        return preset.pid
+    else:
+        print "preset %s is already exists\n" % record[NAME]
+        return ""
 
 
 if __name__ == "__main__":
     initializedb()
     path = "/home/amaris/dev-mixxx/backstage/backstage/test/controllers"
-    importPresetData(path)
+    importMultiPresets(path)

@@ -199,11 +199,11 @@ class FileStorageResource(ModelResource):
     mapping_preset_id = fields.ForeignKey(MappingPresetObjectResource,
                                           "mapping_preset_id")
     file_type = fields.ForeignKey(FileTypeDictResource, "file_type")
-
+    file_obj = fields.FileField(attribute="file_obj")
     class Meta:
         queryset = FileStorage.objects.all()
         resource_name = "presetfile"
-        allowed_methods = ["get"]
+        allowed_methods = ["get,post"]
         filtering = {'mapping_preset_id': ALL_WITH_RELATIONS,
                      'file_type': ALL_WITH_RELATIONS,
                      'file_name': ALL}
