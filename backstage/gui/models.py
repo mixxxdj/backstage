@@ -46,7 +46,7 @@ class MappingPresetObject(models.Model):
     preset_source = models.ForeignKey(MappingPresetSourceDict, blank=False)
     preset_status = models.ForeignKey(CertificatedOperationDict, blank=False)
     mixxx_version = models.ForeignKey(MixxxVersionDict, blank=False)
-    preset_name = models.CharField(max_length=100, unique=True, blank=False)
+    preset_name = models.CharField(max_length=100, blank=False)
     midi_controller = models.ForeignKey(MIDIController, blank=False)
     schema_version = models.IntegerField(blank=False)
     class Meta:
