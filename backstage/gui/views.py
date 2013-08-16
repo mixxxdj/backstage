@@ -24,7 +24,7 @@ def upload(request):
         path = os.path.join(settings.TMP_FILE_PATH, fileName)
         with open(path, "wb+") as dest:
             dest.write(f[1])
-        if len(fileName) >= 9 and cmp(fileName[-9], '.midi.xml') == 0:
+        if len(fileName) >= 9 and cmp(fileName[-9:], '.midi.xml') == 0:
             pid = dbc.importOnePreset(path)
             if pid != '':
                 data = simplejson.dumps({"status": True,
@@ -33,9 +33,7 @@ def upload(request):
                 data = simplejson.dumps({"status": False,
                                          "info": 'The preset name has been used!'})
         else:
-            data = simplejson.dumps({"status":True,"info":'success'})
+            data = simplejson.dumps({})
     else:
-        loginfo(p="get")
-        data = simplejson.dumps({"status": False,
-                                 "info": 'Error request'})
+        data = simplejson.dumps({})
     return HttpResponse(data, mimetype='application/json')
