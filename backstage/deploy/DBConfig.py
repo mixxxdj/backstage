@@ -127,7 +127,9 @@ def importMultiPresets(directory):
 
 def importPresetData(record):
     try:
-        MappingPresetObject.objects.get(preset_name=record[NAME])
+        MappingPresetObject.objects.get(preset_name=record[NAME],
+                                        schema_version=record[SCHEMAVERSION],
+                                        midi_controller=MIDIController.objects.get(record[CONTROLLER]))
     except Exception:
         preset = MappingPresetObject()
         print "importPresetData-------\n"
