@@ -12,6 +12,7 @@ from django.db.models import Avg
 from django.core.paginator import Paginator, InvalidPage
 from django.http import Http404
 from django.db.models import Q
+from django.db.models import Max
 
 from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
@@ -157,7 +158,11 @@ class MappingPresetObjectResource(ModelResource):
         return [url(r"^(?P<resource_name>%s)/search%s$" %
                     (self._meta.resource_name, trailing_slash()),
                     self.wrap_view('get_search'),
-                    name="api_get_search"), ]
+                    name="api_get_search"),
+                url(r"^(?P<resource_name>%s)/updatecheck%s$" %
+                    (self._meta.resource_name, trailing_slash()),
+                    self.wrap_view('update_check'),
+                    name="api_update_check"), ]
 
     def get_search(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
@@ -181,6 +186,25 @@ class MappingPresetObjectResource(ModelResource):
         }
         self.log_throttled_access(request)
         return self.create_response(request, object_list)
+
+    def update_check(self, request):
+        self.method_check(request, allowed=['get'])
+        self.throttle_check(request)
+        queryDict = request.GET.dict()
+        status = CertificatedOperationDict.objects.get(category=CERTIFICATE_CHOICES.CERTIFICATE_PASS)
+        if queryDict.has_key('preset_name') and queryDict.has_key('controller'):
+            results = MappingPresetObject.objects.filter(preset_name=queryDict.get('preset_name'),
+                                                         midi_controller=queryDict.get('controller'),
+                                                         preset_status=status)
+            if len(results) > 0:
+                result = results.order_by("schema_version")[0]
+                object_list = {
+                    'objects': result
+                }
+                self.log_throttled_access(request)
+                return self.create_response(request, object_list)
+        self.log_throttled_access(request)
+        return self.create_response(request, {})
 
 
 class PresetCommentsResource(ModelResource):
