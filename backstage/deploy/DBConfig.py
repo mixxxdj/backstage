@@ -69,21 +69,19 @@ def importAuthors(record, preset):
 
 def importFiles(record, preset):
     ret = {'xml': record[XML], 'pic': record[PIC], 'js': record[JS]}
-    fs = FileStorage()
-    for key in ret.keys():
-        value = ret.get(key)
+    for key, value in ret.items():
         if value is not None:
-            #if os.path.exists(value) is True:
             if os.path.isfile(value) is True:
-                fs.file_name = os.path.basename(value).split('.')[0]
-                fs.mapping_preset_id = preset
-                fs.file_type = FileTypeDict.objects.get(category=key)
-                fs.file_size = os.path.getsize(value)
-                f = open(value)
-                fs.file_obj.save(os.path.basename(value), File(f))
-                fs.save()
-                f.close()
-                print "insert a file:%s" % os.path.basename(value)
+                with File(open(value, 'r')) as f:
+                    fs = FileStorage()
+                    fs.file_name = os.path.basename(value).split('.')[0]
+                    fs.mapping_preset_id = preset
+                    fs.file_type = FileTypeDict.objects.get(category=key)
+                    fs.file_size = os.path.getsize(value)
+                    fs.file_obj = f
+                    #fs.file_obj.save(os.path.basename(value), File(f))
+                    fs.save()
+                    print "insert a file:%s" % os.path.basename(value)
 
 
 def importControllers(record, preset):
