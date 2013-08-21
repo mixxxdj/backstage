@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append('/home/amaris/dev-mixxx/backstage/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'backstage.settings_dev'
 
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from backstage.const.models import *
 from backstage.users.models import *
 from backstage.gui.models import *
@@ -81,7 +82,7 @@ def importFiles(record, preset):
                 f = open(value)
                 fs.file_obj.save(os.path.basename(value), File(f))
                 fs.save()
-                #f.close()
+                f.close()
                 print "insert a file:%s" % os.path.basename(value)
 
 
@@ -126,11 +127,16 @@ def importMultiPresets(directory):
 
 
 def importPresetData(record):
+
     try:
-        MappingPresetObject.objects.get(preset_name=record[NAME],
-                                        schema_version=record[SCHEMAVERSION],
-                                        midi_controller=MIDIController.objects.get(record[CONTROLLER]))
-    except Exception:
+        controller = MIDIController.objects.get(controller_name=record[CONTROLLER])
+        MappingPresetObject.objects.get(midi_controller=controller,
+                                        preset_name=record[NAME],
+                                        schema_version=record[SCHEMAVERSION])
+    except MultipleObjectsReturned:
+        print "already\n"
+        return ""
+    except ObjectDoesNotExist:
         preset = MappingPresetObject()
         print "importPresetData-------\n"
         print record
