@@ -24,12 +24,15 @@ def export(path):
         else:
             print status
             preset = SubElement(root, 'preset')
-            fname = SubElement(preset, 'filename')
-            fname.text = f.file_name
-            presetID = SubElement(preset, 'pid')
-            presetID.text = pid
-            presetStatus = SubElement(preset, 'status')
-            presetStatus.text = status
+            preset.set('filename', f.file_name)
+            preset.set('pid', pid)
+            preset.set('status', status)
+            #fname = SubElement(preset, 'filename')
+            #fname.text = f.file_name
+            #presetID = SubElement(preset, 'pid')
+            #presetID.text = pid
+            #presetStatus = SubElement(preset, 'status')
+            #presetStatus.text = status
     tree = ElementTree(root)
     tree.write(os.path.join(path, 'mapScript.xml'), encoding='utf-8')
 
