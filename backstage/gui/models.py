@@ -81,7 +81,7 @@ class PresetComments(models.Model):
 class FileStorage(models.Model):
     """
     """
-    file_name = models.CharField(max_length=50, blank=False)
+    file_name = models.CharField(unique=True, max_length=100, blank=False)
     mapping_preset_id = models.ForeignKey(MappingPresetObject, blank=False)
     file_type = models.ForeignKey(FileTypeDict, blank=False)
     file_size = models.CharField(max_length=50, blank=True, default=None)

@@ -51,9 +51,7 @@ def importAuthors(record, preset):
                 aut = UserInfo.objects.create(username=author)
                 aut.save()
                 preset.author.add(aut)
-                #print "build author %s" % author
             else:
-                #print "Author %s already exists\n" % author
                 preset.author.add(uname)
             print "Authors are all inserted!"
     else:
@@ -73,15 +71,21 @@ def importFiles(record, preset):
         if value is not None:
             if os.path.isfile(value) is True:
                 with File(open(value, 'r')) as f:
-                    fs = FileStorage()
-                    fs.file_name = os.path.basename(value).split('.')[0]
-                    fs.mapping_preset_id = preset
-                    fs.file_type = FileTypeDict.objects.get(category=key)
-                    fs.file_size = os.path.getsize(value)
-                    fs.file_obj = f
-                    #fs.file_obj.save(os.path.basename(value), File(f))
-                    fs.save()
-                    print "insert a file:%s" % os.path.basename(value)
+                    filename = os.path.basename(value)
+                    try:
+                        FileStorage.objects.get(file_name=filename)
+                    except Exception, e:
+                        print e
+                        fs = FileStorage()
+                        fs.file_name = filename
+                        fs.mapping_preset_id = preset
+                        fs.file_type = FileTypeDict.objects.get(category=key)
+                        fs.file_size = os.path.getsize(value)
+                        fs.file_obj = f
+                        fs.save()
+                        print "insert a file:%s" % os.path.basename(value)
+                    else:
+                        print "file already exists"
 
 
 def importControllers(record, preset):
