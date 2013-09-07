@@ -5,10 +5,10 @@ import sys
 from xml.etree.ElementTree import ElementTree, Element, SubElement
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-sys.path.append('/home/amaris/dev-mixxx/backstage/')
+sys.path.append('/home/amaris/dev-mixxx/backstage/')# change to your project directory
 os.environ['DJANGO_SETTINGS_MODULE'] = 'backstage.settings_dev'
 
-RESOURCE_PATH = "./controllers"
+RESOURCE_PATH ="./controllers"
 MAP_PATH = "./"
 from backstage.gui.models import FileStorage, MappingPresetObject, FileTypeDict
 

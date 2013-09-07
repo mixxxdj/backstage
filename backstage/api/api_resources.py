@@ -227,7 +227,7 @@ class FileStorageResource(ModelResource):
     class Meta:
         queryset = FileStorage.objects.all()
         resource_name = "presetfile"
-        allowed_methods = ["get,post"]
+        allowed_methods = ["get"]
         filtering = {'mapping_preset_id': ALL_WITH_RELATIONS,
                      'file_type': ALL_WITH_RELATIONS,
                      'file_name': ALL}

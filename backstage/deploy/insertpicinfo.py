@@ -3,7 +3,6 @@
 import os
 from xml.etree import ElementTree as ET
 
-
 #root name defination
 TREE_INFO = "info"
 TREE_CONTROLLER = "controller"
@@ -31,9 +30,10 @@ def insert_pic_info(path=None):
     root = tree.getroot()
     controller_tag = root.find(TREE_CONTROLLER)
     pic_tag = ET.Element(PICFILES)
-    pic = ET.SubElement(pic_tag, PIC)
     pic_name = get_pic_name(path)
-    pic.set('name', pic_name)
+    if pic_name is not None:
+        pic = ET.SubElement(pic_tag, PIC)
+        pic.set('name', pic_name)
     controller_tag.insert(1, pic_tag)
     tree.write(path)
     return
@@ -60,7 +60,7 @@ def get_pic_name(path=None):
         return os.path.basename(pic_gif)
     else:
         print "no pic files for this preset file%s" % os.path.basename(path)
-        return ""
+        return None
 
 
 def get_specific_files(path=None):
@@ -103,4 +103,4 @@ def midi_insert(path=None):
 
 
 if __name__ == "__main__":
-    midi_insert(path="/home/amaris/dev-mixxx/backstage/backstage/test/controllers")
+    midi_insert(path="./../test/controllers")

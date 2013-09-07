@@ -3,7 +3,7 @@ import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-sys.path.append('/home/amaris/dev-mixxx/backstage/')
+sys.path.append('/home/amaris/dev-mixxx/backstage/')# change to your project directory
 os.environ['DJANGO_SETTINGS_MODULE'] = 'backstage.settings_dev'
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
@@ -179,5 +179,5 @@ def importPresetData(record):
 
 if __name__ == "__main__":
     initializedb()
-    path = "/home/amaris/dev-mixxx/backstage/backstage/test/controllers"
+    path = "../test/controllers"
     importMultiPresets(path)
