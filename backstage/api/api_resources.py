@@ -187,24 +187,27 @@ class MappingPresetObjectResource(ModelResource):
         self.log_throttled_access(request)
         return self.create_response(request, object_list)
 
-    def update_check(self, request):
+    def update_check(self, request ,**kwargs):
         self.method_check(request, allowed=['get'])
         self.throttle_check(request)
         queryDict = request.GET.dict()
-        status = CertificatedOperationDict.objects.get(category=CERTIFICATE_CHOICES.CERTIFICATE_PASS)
+        status = CertificatedOperationDict.objects.get(category=CERTIFICATE_PASS)
+        object_list = {
+            'objects': result
+        }
         if queryDict.has_key('preset_name') and queryDict.has_key('controller'):
-            results = MappingPresetObject.objects.filter(preset_name=queryDict.get('preset_name'),
-                                                         midi_controller=queryDict.get('controller'),
-                                                         preset_status=status)
-            if len(results) > 0:
-                result = results.order_by("schema_version")[0]
-                object_list = {
-                    'objects': result
-                }
-                self.log_throttled_access(request)
-                return self.create_response(request, object_list)
+            try:
+                controller=MIDIController.objects.get(controller_name=queryDict.get('controller'))
+            except Exception, e:
+                print e
+            else:
+                results = MappingPresetObject.objects.filter(preset_name=queryDict.get('preset_name'),
+                                                             midi_controller=controller,
+                                                             preset_status=status)
+                if len(results) > 0:
+                    result = results.order_by("schema_version")
         self.log_throttled_access(request)
-        return self.create_response(request, {})
+        return self.create_response(request, object_list)
 
 
 class PresetCommentsResource(ModelResource):
