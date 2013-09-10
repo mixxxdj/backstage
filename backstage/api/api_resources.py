@@ -217,8 +217,24 @@ class PresetCommentsResource(ModelResource):
 
     class Meta:
         queryset = PresetComments.objects.all()
-        resource_name = "midi/preset/comment"
-        allowed_methods = ["get"]
+        resource_name = "comment"
+        allowed_methods = ["get", "post"]
+        filtering = {'ratings': ALL,
+                     'preset_mapping_uuid': ALL_WITH_RELATIONS}
+
+    def rating(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+        self.throttle_check(request)
+        queryDict = request.GET.dict()
+        if queryDict.has_key('rating') and queryDict.has_key('pid'):
+            print queryDict.get('rating')
+            print queryDict.get('pid')
+
+    def prepend_urls(self):
+        return [url(r"^(?P<resource_name>%s)/rating%s" %
+                    (self._meta.resource_name, trailing_slash()),
+                    self.wrap_view('rating'),
+                    name="api_rating"), ]
 
 
 class FileStorageResource(ModelResource):

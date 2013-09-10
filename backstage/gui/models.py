@@ -64,7 +64,7 @@ class PresetComments(models.Model):
                             verbose_name="id", primary_key=True,
                             default=get_uuid)
     comments = models.TextField(blank=True)
-    comment_author = models.CharField(max_length=40, blank=False)
+    comment_author = models.CharField(max_length=40, blank=True)
     ratings = models.FloatField(blank=False, default=0.0)
     preset_mapping_uuid = models.ForeignKey(MappingPresetObject, blank=False)
     date = models.DateTimeField(blank=False, 
