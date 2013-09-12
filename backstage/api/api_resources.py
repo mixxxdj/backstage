@@ -187,7 +187,7 @@ class MappingPresetObjectResource(ModelResource):
         self.log_throttled_access(request)
         return self.create_response(request, object_list)
 
-    def update_check(self, request ,**kwargs):
+    def update_check(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         self.throttle_check(request)
         queryDict = request.GET.dict()
@@ -225,10 +225,20 @@ class PresetCommentsResource(ModelResource):
     def rating(self, request, **kwargs):
         self.method_check(request, allowed=['post'])
         self.throttle_check(request)
-        queryDict = request.GET.dict()
+        queryDict = request.POST.dict()
         if queryDict.has_key('rating') and queryDict.has_key('pid'):
-            print queryDict.get('rating')
-            print queryDict.get('pid')
+            score = queryDict.get('rating')
+            pid = queryDict.get('pid')
+	    print score
+            print pid
+            comment = PresetComments(preset_mapping_uuid=pid,
+                                     ratings=score)
+            comment.save()
+            self.log_throttled_access(request)
+            return self.create_response(request, "ok")
+        else:
+            self.log_throttled_access(request)
+            return self.create_response(request, "wrong request")
 
     def prepend_urls(self):
         return [url(r"^(?P<resource_name>%s)/rating%s" %
