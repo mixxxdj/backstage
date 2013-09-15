@@ -192,12 +192,10 @@ class MappingPresetObjectResource(ModelResource):
         self.throttle_check(request)
         queryDict = request.GET.dict()
         status = CertificatedOperationDict.objects.get(category=CERTIFICATE_PASS)
-        object_list = {
-            'objects': result
-        }
+        result = []
         if queryDict.has_key('preset_name') and queryDict.has_key('controller'):
             try:
-                controller=MIDIController.objects.get(controller_name=queryDict.get('controller'))
+                controller = MIDIController.objects.get(controller_name=queryDict.get('controller'))
             except Exception, e:
                 print e
             else:
@@ -205,7 +203,15 @@ class MappingPresetObjectResource(ModelResource):
                                                              midi_controller=controller,
                                                              preset_status=status)
                 if len(results) > 0:
-                    result = results.order_by("schema_version")
+                    result_obj = results.order_by("schema_version")[0]
+                    bundle = self.build_bundle(obj=result_obj, request=request)
+                    bundle = self.full_dehydrate(bundle)
+                    result.append(bundle)
+
+        object_list = {
+            'objects': result
+        }
+        print object_list
         self.log_throttled_access(request)
         return self.create_response(request, object_list)
 
