@@ -229,13 +229,18 @@ class PresetCommentsResource(ModelResource):
         if queryDict.has_key('rating') and queryDict.has_key('pid'):
             score = queryDict.get('rating')
             pid = queryDict.get('pid')
-	    print score
+            print score
             print pid
-            comment = PresetComments(preset_mapping_uuid=pid,
-                                     ratings=score)
-            comment.save()
-            self.log_throttled_access(request)
-            return self.create_response(request, "ok")
+            try:
+                preset_obj = MappingPresetObject.objects.get(pid=pid)
+            except Exception:
+                return self.create_response(request, "wrong request")
+            else:
+                comment = PresetComments(preset_mapping_uuid=preset_obj,
+                                         ratings=score)
+                comment.save()
+                self.log_throttled_access(request)
+                return self.create_response(request, "ok")
         else:
             self.log_throttled_access(request)
             return self.create_response(request, "wrong request")
