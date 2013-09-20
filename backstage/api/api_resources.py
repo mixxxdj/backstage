@@ -116,9 +116,19 @@ class MappingPresetObjectResource(ModelResource):
         try:
             fileURL = FileStorage.objects.get(mapping_preset_id=pid,
                                               file_type__category=filetype).file_obj.url
-        except Exception:
-            pass
+        except Exception, e:
+            print e
         return fileURL
+
+    def getFileName(self, bundle, filetype):
+        pid = bundle.data["pid"]
+        fileName = ""
+        try:
+            fileName = FileStorage.objects.get(mapping_preset_id=pid,
+                                               file_type__category=filetype).file_name
+        except Exception, e:
+            print e
+        return fileName
 
     def getAvgRatings(self, bundle):
         pid = bundle.data["pid"]
@@ -152,6 +162,10 @@ class MappingPresetObjectResource(ModelResource):
             bundle.data["picture_file"] = self.getFile(bundle, FILE_PIC)
             bundle.data["avg_ratings"] = self.getAvgRatings(bundle)
             bundle.data["author"] = self.getAuthor(bundle)
+            bundle.data["picture_file_name"] = self.getFileName(bundle, FILE_PIC)
+            bundle.data["js_file_name"] = self.getFileName(bundle, FILE_JS)
+            bundle.data["xml_file_name"] = self.getFileName(bundle, FILE_XML)
+
         return bundle
 
     def prepend_urls(self):
@@ -179,8 +193,9 @@ class MappingPresetObjectResource(ModelResource):
         for result in sqs:
             bundle = self.build_bundle(obj=result, request=request)
             bundle = self.full_dehydrate(bundle)
+            #bundle = bundle.order_by("avg_ratings")
             objects.append(bundle)
-
+        print objects
         object_list = {
             'objects': objects,
         }
